@@ -1,0 +1,594 @@
+/*--------------------------------------------------------------
+# Base Styles 
+--------------------------------------------------------------*/
+:root {
+  --default-font: "Quicksand", "Open Sans", "Lora", system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --heading-font: "Quicksand", sans-serif;
+  --nav-font: "Quicksand", sans-serif;
+
+  --background-color: #ffffff;
+  --default-color: #000000;
+  --heading-color: #ffffff;
+  --accent-color: #307a68;
+  --contrast-color: #ffffff;
+}
+
+/*--------------------------------------------------------------
+# General Styles
+--------------------------------------------------------------*/
+a {
+  color: var(--accent-color);
+  text-decoration: none;
+  transition: 0.3s;
+  font-weight: bold; /* Menambahkan bold pada link */
+}
+
+/*--------------------------------------------------------------
+# Header Styles 
+--------------------------------------------------------------*/
+/* Styling untuk Header */
+.header {
+  background-color: #307a68; /* Warna latar belakang header */
+  padding: 20px 0; /* Memberikan ruang di atas dan bawah */
+  position: sticky;
+  top: 0; /* Menjaga header tetap di atas saat di-scroll */
+  z-index: 1000; /* Agar header berada di atas konten lainnya */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Memberikan bayangan halus */
+  transition: background-color 0.3s ease; /* Transisi saat background berubah */
+}
+
+body {
+  font-family: var(--default-font);
+}
+
+/* Styling untuk Branding */
+.branding {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Membuat jarak antara logo dan menu */
+}
+
+/* Styling untuk Logo */
+.sitename { /* Menggunakan font Poppins */
+  font-size: 30px;
+  font-weight: bold;
+  color: #ffffff; /* Warna hijau untuk logo */
+  text-transform: uppercase; /* Membuat semua huruf kapital */
+  margin: 0;
+  transition: color 0.3s ease; /* Transisi saat warna logo berubah */
+}
+
+/* Styling untuk Navigasi */
+.navmenu {
+  display: flex;
+  align-items: center;
+  transition: background-color 0.3s ease; /* Transisi saat background berubah */
+}
+
+/* Styling untuk Menu List */
+.navmenu ul {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-wrap: wrap; /* Membungkus item jika ruang tidak cukup */
+  justify-content: center; /* Menyusun menu ke tengah */
+}
+
+/* Styling untuk setiap menu item */
+.navmenu li {
+  margin-right: 20px;
+}
+
+/* Styling untuk setiap link menu */
+.navmenu a { /* Menggunakan font Quicksand yang lebih soft */
+  font-size: 16px;
+  color: #fffcfc;
+  text-decoration: none; /* Menghilangkan garis bawah */
+  text-transform: capitalize; /* Membuat huruf pertama besar */
+  padding: 10px 0;
+  transition: color 0.3s ease, background-color 0.3s ease; /* Transisi untuk warna teks dan background */
+}
+
+/* Styling untuk tombol CTA */
+.cta-btn {
+  background: rgba(245, 245, 220, 0.8); /* Warna krem transparan */
+  color: var(--accent-color);
+  padding: 15px 30px;
+  font-size: 16px;
+  font-weight: bold;
+  border: 2px solid rgba(245, 245, 220, 0.8); /* Border krem transparan */
+  border-radius: 5px;
+  text-decoration: none;
+  transition: all 0.4s ease-in-out; /* Transisi lebih halus */
+  backdrop-filter: blur(5px); /* Efek blur pada background */
+}
+
+.cta-btn:hover {
+  background-color: rgba(245, 245, 220, 1); /* Warna krem lebih solid saat hover */
+  color: var(--accent-color); /* Warna teks tetap */
+  border-color: rgba(245, 245, 220, 1); /* Border krem lebih solid saat hover */
+  box-shadow: 0 0 15px rgba(245, 245, 220, 1); /* Efek bayangan krem lebih solid */
+}
+
+
+
+
+
+/* Menyembunyikan tombol CTA pada layar kecil */
+.d-none.d-sm-block {
+  display: block;
+}
+
+/* Styling untuk Menu List */
+.navmenu ul {
+  display: flex; /* Menyusun item menu secara horizontal */
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-wrap: wrap; /* Membungkus item jika ruang tidak cukup */
+  justify-content: center; /* Menyusun menu ke tengah */
+}
+
+
+
+/*--------------------------------------------------------------
+# Hero Section Styles
+--------------------------------------------------------------*/
+.hero {
+  width: 100%;
+  min-height: calc(100vh - 112px);
+  padding: 80px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  background-color: #f0f0f0; /* Ganti dengan warna latar belakang yang sesuai */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Bayangan di bagian bawah */
+}
+
+.hero img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+.hero .container {
+  z-index: 3;
+}
+
+.hero .welcome h2 {
+  margin: 0;
+  font-size: 48px;
+  font-weight: bold; /* Menambahkan bold */
+}
+
+.hero .welcome p {
+  font-size: 24px;
+  margin: 0;
+}
+
+.hero .content {
+  margin-top: 40px;
+}
+
+/* Style untuk judul h3 */
+.col-lg-6 h3 {
+  font-size: 40px; /* Ukuran font untuk judul */
+  font-weight: bold; /* Membuat teks judul menjadi bold */
+  color: #000000; /* Warna teks hijau */
+  margin-bottom: 15px; /* Memberikan jarak di bawah judul */
+  text-align: center; /* Menyelaraskan judul ke tengah */
+  margin-top: 80px; /* Memberikan jarak di atas paragraf */
+  text-transform: capitalize; /* Menjadikan setiap kata diawali huruf kapital */
+}
+
+/* Style untuk paragraf p */
+.col-lg-6 p {
+  font-size: 18px; /* Ukuran font untuk paragraf */
+  color: #000000; /* Warna teks gelap */
+  line-height: 1.8; /* Jarak antar baris menjadi 2 */
+  text-align: justify; /* Menyelaraskan teks ke kiri dan kanan */
+  margin-top: 25px; /* Memberikan jarak di atas paragraf */
+}
+
+
+
+#gallery {
+  background-color: rgba(253, 253, 246, 0.8); /* Ganti dengan warna latar belakang yang sesuai */
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1); /* Bayangan di bagian bawah */
+}
+
+
+/* Style untuk container section-title */
+.container.section-title h2 {
+  font-size: 30px; /* Ukuran font untuk judul */
+  font-weight: bold; /* Membuat teks judul menjadi bold */
+  color: #000000; /* Warna hijau */
+  margin-bottom: 20px;
+  text-align: center;
+  text-transform: capitalize;
+  margin-top: 95px; /* Memberikan jarak di atas paragraf */
+}
+
+.container.section-title p {
+  font-size: 18px; /* Ukuran font untuk paragraf */
+  line-height: 1.8; /* Jarak antar baris */
+  color: #000000; /* Warna teks gelap */
+  text-align: justify;
+}
+
+/* Style untuk container-fluid */
+.container-fluid {
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+
+.gallery-item img {
+  width: 100%; /* Gambar mengisi seluruh lebar kolom */
+  height: auto; /* Menjaga proporsi gambar */
+  border-radius: 8px; /* Sudut gambar juga melengkung */
+}
+
+/* Responsif untuk ukuran layar lebih kecil dari 992px (tablet) */
+@media (max-width: 992px) {
+  .gallery-item {
+    margin: 8px; /* Menambah jarak antar gambar pada tablet */
+  }
+}
+
+/* Styling untuk container informasi */
+/* Styling untuk judul h2 */
+#informasi h2 {
+  font-size: 30px; /* Ukuran font yang lebih besar */
+  font-weight: bold; /* Membuat huruf menjadi tebal */
+  color: #000000; /* Warna teks gelap agar mudah dibaca */
+  text-align: center; /* Menyelaraskan teks ke tengah */
+  margin-top: 20px; /* Memberikan jarak di bawah judul */
+  margin-bottom: 50px;
+}
+
+.informasi {
+  padding: 60px 0; /* Memberikan padding agar ada ruang di atas dan bawah */
+  background-image: url('../img/bg.png'); /* Menambahkan gambar latar belakang */
+  background-size: cover; /* Membuat gambar latar belakang memenuhi seluruh elemen */
+  background-position: center; /* Menempatkan gambar di tengah elemen */
+  background-repeat: no-repeat; /* Mencegah gambar diulang */
+}
+
+/* Styling untuk gambar dan teks */
+.informasi .row {
+  display: flex;
+  flex-wrap: wrap; /* Agar responsif, membuat baris baru pada layar kecil */
+}
+
+/* Styling untuk kolom gambar dan teks */
+.informasi .col-lg-6, .informasi .col-md-6 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px; /* Memberikan jarak antar elemen */
+}
+
+/* Styling untuk gambar agar responsif dan tidak melebihi ukuran kontainer */
+.informasi img.img-fluid {
+  max-width: 50%; /* Gambar menyesuaikan lebar kolom */
+  height: auto; /* Menjaga rasio gambar tetap terjaga */
+  border-radius: 10px; /* Memberikan border-radius agar gambar lebih halus */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Memberikan bayangan pada gambar */
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Animasi saat hover */
+}
+
+/* Efek hover pada gambar */
+.informasi img.img-fluid:hover {
+  transform: scale(1.05); /* Memperbesar gambar sedikit saat hover */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Bayangan lebih jelas saat hover */
+}
+
+/* Styling untuk teks di bawah gambar */
+.informasi p {
+  font-weight: 500;
+  font-size: 20px;
+  color: #000000; /* Warna teks gelap agar mudah dibaca */
+  text-align: center; /* Menyelaraskan teks ke tengah */
+  margin-top: 15px; /* Memberikan jarak antara gambar dan teks */
+}
+
+.hero .content .why-box {
+  color: var(--contrast-color);
+  background: var(--accent-color);
+  padding: 30px;
+  border-radius: 4px;
+}
+
+.hero .content .why-box h3 {
+  color: var(--contrast-color);
+  font-weight: bold; /* Menambahkan bold */
+  font-size: 34px;
+  margin-bottom: 30px;
+}
+
+.hero .content .why-box p {
+  margin-bottom: 30px;
+  text-align: justify;
+  line-height: 2; /* Menambah jarak antar baris teks */
+}
+
+.hero .content .why-box .more-btn {
+  color: var(--contrast-color);
+  background: color-mix(in srgb, var(--contrast-color), transparent 80%);
+  display: inline-block;
+  padding: 6px 30px 8px 30px;
+  border-radius: 50px;
+  transition: all ease-in-out 0.4s;
+}
+
+.hero .content .why-box .more-btn:hover {
+  background: var(--surface-color);
+  color: var(--accent-color);
+}
+
+.hero .content .icon-box {
+  text-align: center;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--surface-color), transparent 20%);
+  box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
+  padding: 40px 30px;
+  width: 100%;
+}
+
+.hero .content .icon-box i {
+  font-size: 40px;
+  color: var(--accent-color);
+}
+
+.hero .content .icon-box h4 {
+  font-size: 20px;
+  font-weight: bold; /* Menambahkan bold */
+  margin: 10px 0 20px 0;
+}
+
+.hero .content .icon-box p {
+  font-size: 15px;
+  color: color-mix(in srgb, var(--default-color), transparent 30%);
+  font-weight: bold; /* Menambahkan bold */
+}
+
+/*--------------------------------------------------------------
+# Table Styles
+--------------------------------------------------------------*/
+table {
+  width: 100%;
+  margin: 20px auto;
+  border-collapse: collapse;
+  box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
+  background-color: #4fb59b96;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+table thead th {
+  color: #000000;
+  padding: 25px;
+  font-size: 1.3rem;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: inset 0 -2px 0 rgba(255, 255, 255, 0.2);
+  font-weight: bold; /* Menambahkan bold */
+}
+
+table tbody td {
+  padding: 20px;
+  border: none;
+  color: #000000;
+  text-align: justify;
+  font-size: 1rem;
+  font-weight: bold; /* Menambahkan bold */
+}
+
+table tbody tr:nth-child(even),
+table tbody tr:nth-child(odd) {
+  background-image: url('../img/informasi.png');
+  background-size: 1500px 600px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+table tbody td:first-child {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #00000096;
+}
+
+table tbody td:hover {
+  color: #00000096;
+}
+
+/*--------------------------------------------------------------
+# Footer Styles
+--------------------------------------------------------------*/
+footer {
+  text-align: center;
+  padding: 20px;
+  background-color: #4fb59b96;
+  color: #fff;
+  font-size: 0.9rem;
+  margin-top: 20px;
+  box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+}
+
+footer a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold; /* Menambahkan bold */
+  transition: color 0.2s ease-in-out;
+}
+
+footer a:hover {
+  color: #4fb59b96;
+}
+
+/*--------------------------------------------------------------
+# Responsive Styles
+--------------------------------------------------------------*/
+@media (max-width: 768px) {
+  .header .logo h1 {
+    font-size: 24px;
+    text-align: left;
+    font-weight: bold; /* Menambahkan bold */
+  }
+
+}
+
+/* Responsif untuk ukuran layar lebih kecil dari 480px */
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.5rem;
+    font-weight: bold; /* Menambahkan bold */
+  }
+
+  .hero .content .why-box h3 {
+    font-size: 24px;
+    font-weight: bold; /* Menambahkan bold */
+  }
+
+  .hero .content .icon-box h4 {
+    font-size: 18px;
+    font-weight: bold; /* Menambahkan bold */
+  }
+
+  .header .cta-btn {
+    padding: 8px 10px;
+    font-size: 12px;
+    font-weight: bold; /* Menambahkan bold */
+  }
+
+  table thead th,
+  table tbody td {
+    padding: 8px;
+    font-size: 0.9rem;
+    font-weight: bold; /* Menambahkan bold */
+  }
+}
+
+/* Styling untuk menu navigasi */
+#navmenu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 20px;
+}
+
+#navmenu ul li {
+  position: relative;
+}
+
+#navmenu ul li a {
+  text-decoration: none;
+  color: white;
+  font-size: 16px;
+  display: block;
+}
+
+.sitename-logo {
+  max-width: 180px; /* Sesuaikan ukuran maksimum logo */
+  height: auto;
+  display: inline-block;
+  margin-top: -50px;
+  margin-bottom: -35px;
+}
+
+#navmenu ul li a:hover {
+  color: rgba(245, 245, 220, 0.8);
+  border-radius: 5px;
+}
+
+/* Styling untuk menu dropdown */
+#navmenu ul li .dropdown-active {
+  display: block;
+  background-color: #333; /* Ubah warna latar belakang dropdown */
+  color: #fff; /* Ubah warna teks dalam dropdown */
+  border-radius: 5px;
+}
+
+#navmenu ul li .toggle-dropdown {
+  cursor: pointer;
+}
+
+/* Menyembunyikan tombol toggle pada layar lebih besar dari 480px */
+.mobile-nav-toggle {
+  display: none; /* Menyembunyikan tombol toggle pada layar besar */
+}
+
+/* Menampilkan tombol toggle hanya pada layar dengan lebar ≤ 480px */
+@media (max-width: 520px) {
+  .mobile-nav-toggle {
+    display: block; /* Menampilkan tombol toggle */
+    font-size: 24px; /* Ukuran font lebih besar */
+    padding: 15px; /* Menambah padding agar tombol lebih besar */
+    color: white; /* Warna ikon */
+    cursor: pointer;
+  }
+
+  #navmenu ul {
+    display: none; /* Menyembunyikan menu secara default pada layar kecil */
+    flex-direction: column;
+    gap: 10px;
+    background-color: #fff;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+  }
+
+  #navmenu ul.active {
+    display: flex; /* Menampilkan menu saat toggle aktif */
+    background-color: rgba(51, 51, 51, 0.863); /* Memberikan latar belakang dengan sedikit transparansi */
+    margin-top: 20px;
+  }
+  
+
+  #navmenu ul li {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Styling untuk toggle dropdown di mobile */
+  #navmenu ul li .dropdown-active {
+    display: none;
+  }
+
+  #navmenu ul li.active .dropdown-active {
+    display: block;
+  }
+
+  /* Styling untuk tombol menu toggle di mobile */
+  .mobile-nav-toggle {
+    font-size: 24px;
+    cursor: pointer;
+  }
+
+  body.mobile-nav-active {
+    overflow: hidden; /* Mencegah scrolling saat menu mobile aktif */
+  }
+
+  #navmenu ul.active li a:hover {
+    background-color: rgba(245, 245, 220, 0.8); /* Menambahkan warna latar belakang krem pada hover */
+    border-radius: 5px;
+    color: #333;
+  }
+}
+
+

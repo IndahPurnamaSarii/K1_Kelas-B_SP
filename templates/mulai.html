@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konsultasi Sekarang</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Tombol Toggle Sidebar -->
+    <div class="sidebar-toggle">
+        <i class="fas fa-bars"></i>
+    </div>
+
+    <!-- Sidebar -->
+<!-- Sidebar -->
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar"> <!-- Menambahkan kelas 'open' disini -->
+        <div class="menu-item"></div>
+        <div class="menu-item suggestions">
+            <h1>Saran Pertanyaan</h1>
+            <button class="suggestion-btn">Apa penyebab terjadinya stunting pada anak?</button>
+            <button class="suggestion-btn">Makanan apa yang dapat memperbaiki gizi anak?</button>
+            <button class="suggestion-btn">Apa dampak jangka panjang dari stunting pada perkembangan fisik dan kognitif anak?</button>
+            <button class="suggestion-btn">Apa hal yang dapat dilakukan saat anak terkena stunting?</button>
+            <button class="suggestion-btn">Bagaimana peran gizi seimbang dalam mencegah terjadinya stunting pada anak?</button>
+        </div>
+    </div>
+    <div class="chatbot-container">
+        <div class="chatbot-container">
+            <div id="header">
+                <a href="/">
+                    <img src="../static/img/logok.png" alt="KidziCare Logo" class="logo">
+                </a>
+            </div>
+        </div>        
+    </div>          
+    <div id="chatbot">
+        <div id="conversation"></div>
+        <form id="input-form">
+            <div class="message-container">
+                <input id="input-field" type="text" placeholder="Konsultasikan permasalahan buah hati...">
+                <!-- Ganti gambar kirim dengan ikon Font Awesome -->
+                <button id="submit-button" type="submit"><i class="fas fa-paper-plane send-icon" aria-hidden="true"></i></button>
+                <!-- Ganti ikon mikrofon dengan ikon Font Awesome -->
+                <button id="mic-button" type="button" class="mic-btn" aria-label="Rekam Suara">
+                    <i class="fas fa-microphone mic-icon" aria-hidden="true"></i>
+                </button>
+                <!-- Ganti ikon hapus dengan ikon Font Awesome -->
+                <button id="clear-button" type="button" class="clear-btn" aria-label="Hapus">
+                    <i class="fas fa-trash-alt clear-icon" aria-hidden="true"></i>
+                </button>
+            </div>                
+        </form>
+    </div>
+    <script>
+        let isSpeaking = false;
+        let currentUtterance = null;
+        let recognition; // Variabel untuk SpeechRecognition
+        let isRecordingCancelled = false; // Status apakah perekaman dibatalkan
+        const chatbot = document.getElementById('chatbot'), conversation = document.getElementById('conversation'), inputForm = document.getElementById('input-form'),
+            inputField = document.getElementById('input-field'), clearBtn = document.getElementById('clear-button'), micBtn = document.getElementById('mic-button');
+    
+        function getCurrentTime() {
+            return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+    
+                function attachMessageActions(message, isUserMessage = false) {
+            if (!isUserMessage) {
+                message.querySelector('.copy-btn').addEventListener('click', () => {
+                    navigator.clipboard.writeText(message.querySelector('.chatbot-text').firstChild.textContent.trim())
+                        .then(() => alert('Pesan berhasil disalin!'))
+                        .catch(err => alert('Gagal menyalin pesan: ' + err));
+                });
+
+                message.querySelector('.speak-btn').addEventListener('click', () => {
+                    const messageText = message.querySelector('.chatbot-text').firstChild.textContent.trim();
+
+                    // Menghapus emoji dari teks
+                    const textWithoutEmoji = messageText.replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]+/gu, '');
+
+                    // Membaca teks jika belum berbicara, menghentikan jika sedang berbicara
+                    if (!isSpeaking) {
+                        if (!currentUtterance) {
+                            currentUtterance = new SpeechSynthesisUtterance(textWithoutEmoji);
+                            currentUtterance.lang = 'id-ID'; // Bahasa Indonesia
+
+                            // Mengatur ulang status ketika pembacaan selesai
+                            currentUtterance.onend = () => {
+                                isSpeaking = false;
+                                currentUtterance = null;
+                            };
+                        }
+
+                        speechSynthesis.speak(currentUtterance);
+                        isSpeaking = true;
+                    } else {
+                        speechSynthesis.cancel();
+                        isSpeaking = false;
+                    }
+                });
+            }
+        }
+        function createMessage(content, sender, time = getCurrentTime()) {
+            const isUserMessage = sender === 'user-message';
+    
+            const formattedContent = content
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/^\*(.*?)$/gm, '<ul><li>$1</li></ul>');
+
+            const message = document.createElement('div');
+            message.classList.add('chatbot-message', sender);
+            message.innerHTML = `
+                <p class="chatbot-text">${formattedContent}</p>
+                <span class="time">${time}</span>
+                ${!isUserMessage ? '<button class="copy-btn" aria-label="Salin Pesan"></button><button class="speak-btn" aria-label="Baca Pesan"></button>' : ''}
+            `;
+            attachMessageActions(message, isUserMessage);
+            return message;
+        }
+
+        function showInitialMessage() {
+            const message = createMessage('Halo, saya adalah asisten KidziCare yang siap memberikan informasi kepada anda terkait dengan gizi! 😊', 'chatbot');
+            
+            // Menambahkan margin-top pada pesan
+            message.style.marginTop = '20px';  // Ganti nilai 20px sesuai kebutuhan
+            
+            conversation.appendChild(message);
+        }
+
+        window.onload = async () => {
+            showInitialMessage();
+            await loadConversationHistory();
+        };
+    
+        clearBtn.addEventListener('click', async () => {
+            if (confirm('Apakah Anda yakin ingin menghapus percakapan ini?')) {
+                const response = await fetch('/clear_history', { method: 'POST' });
+                const result = await response.json();
+                if (result.status === 'success') {
+                    conversation.innerHTML = '';
+                    showInitialMessage();
+                } else {
+                    alert('Gagal menghapus riwayat percakapan.');
+                }
+            }
+        });
+
+        micBtn.addEventListener('click', () => {
+            if (!('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
+                alert('Browser Anda tidak mendukung fitur pengenalan suara.');
+                return;
+            }
+
+            if (isSpeaking) {
+                // Jika sedang merekam, hentikan perekaman
+                recognition.stop();
+                isSpeaking = false;
+                isRecordingCancelled = true; // Tandai bahwa perekaman dibatalkan
+                inputField.value = ''; // Hapus teks dari inputField
+                alert('Perekaman suara dibatalkan, pesan tidak akan dikirim.');
+                return;
+            }
+
+            recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = 'id-ID';
+            recognition.start();
+            isSpeaking = true;
+            isRecordingCancelled = false; // Reset status perekaman dibatalkan
+
+           // Elemen notifikasi
+            const recordingNotification = document.createElement('div');
+            recordingNotification.classList.add('recording-notification');
+            recordingNotification.style.display = 'none'; // Awalnya tidak ditampilkan
+            recordingNotification.innerHTML = `<p class="chatbot-text">Sedang merekam...</p>`;
+            document.body.appendChild(recordingNotification);
+
+            recognition.onstart = () => {
+                recordingNotification.style.display = 'block'; // Tampilkan notifikasi saat mulai merekam
+            };
+
+            recognition.onresult = event => {
+                if (!isRecordingCancelled) {
+                    inputField.value = event.results[0][0].transcript;
+                    setTimeout(() => inputForm.dispatchEvent(new Event('submit')), 2000);
+                }
+                document.body.removeChild(recordingNotification);
+                isSpeaking = false;
+            };
+
+            recognition.onerror = event => {
+                alert('Terjadi kesalahan saat merekam suara: ' + event.error);
+                document.body.removeChild(recordingNotification);
+                inputField.value = ''; // Hapus teks dari inputField
+                isSpeaking = false;
+            };
+
+            recognition.onend = () => {
+                if (document.body.contains(recordingNotification)) {
+                    document.body.removeChild(recordingNotification);
+                }
+                isSpeaking = false;
+            };
+        });
+
+        inputForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            // Cek apakah perekaman dibatalkan
+            if (isRecordingCancelled) {
+                isRecordingCancelled = false; // Reset status untuk penggunaan berikutnya
+                return; // Jangan kirim pesan
+            }
+
+            const input = inputField.value.trim();
+            if (!input) return;
+
+            inputField.value = '';
+            const userMessage = createMessage(input, 'user-message');
+            conversation.appendChild(userMessage);
+            userMessage.scrollIntoView({ behavior: 'smooth' });
+
+            const typingMessage = createMessage('Sedang mengetik...', 'chatbot');
+            conversation.appendChild(typingMessage);
+            typingMessage.scrollIntoView({ behavior: 'smooth' });
+
+            try {
+                const response = await fetch(`/get?msg=${encodeURIComponent(input)}`);
+                const result = await response.json();
+                conversation.removeChild(typingMessage);
+
+                const botMessage = createMessage(result, 'chatbot');
+                conversation.appendChild(botMessage);
+                botMessage.scrollIntoView({ behavior: 'smooth' });
+            } catch (error) {
+                console.error('Error fetching response:', error);
+                conversation.removeChild(typingMessage);
+
+                const errorMessage = createMessage('Maaf, terjadi kesalahan. Silakan coba lagi nanti.', 'chatbot');
+                conversation.appendChild(errorMessage);
+                errorMessage.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+
+    
+        inputForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const input = inputField.value.trim();
+            if (!input) return;
+    
+            inputField.value = '';
+            const userMessage = createMessage(input, 'user-message');
+            conversation.appendChild(userMessage);
+            userMessage.scrollIntoView({ behavior: 'smooth' });
+    
+            const typingMessage = createMessage('Sedang mengetik...', 'chatbot');
+            conversation.appendChild(typingMessage);
+            typingMessage.scrollIntoView({ behavior: 'smooth' });
+    
+            try {
+                const response = await fetch(`/get?msg=${encodeURIComponent(input)}`);
+                const result = await response.json();
+                conversation.removeChild(typingMessage);
+    
+                const botMessage = createMessage(result, 'chatbot');
+                conversation.appendChild(botMessage);
+                botMessage.scrollIntoView({ behavior: 'smooth' });
+            } catch (error) {
+                console.error('Error fetching response:', error);
+                conversation.removeChild(typingMessage);
+    
+                const errorMessage = createMessage('Maaf, terjadi kesalahan. Silakan coba lagi nanti.', 'chatbot');
+                conversation.appendChild(errorMessage);
+                errorMessage.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+
+        async function loadConversationHistory() {
+            try {
+                const response = await fetch('/load_history');
+                const history = await response.json();
+    
+                history.forEach(entry => {
+                    const message = createMessage(entry.message, entry.sender === 'user' ? 'user-message' : 'chatbot');
+                    conversation.appendChild(message);
+                });
+    
+                conversation.lastChild?.scrollIntoView({ behavior: 'smooth' });
+            } catch (error) {
+                console.error('Error loading conversation history:', error);
+            }
+        }
+
+        const suggestionButtons = document.querySelectorAll('.suggestion-btn');
+        suggestionButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const message = button.textContent.trim();
+                inputField.value = message;
+                inputForm.dispatchEvent(new Event('submit'));
+            });
+        });
+
+        // Mendapatkan elemen sidebar, chatbot, dan message-container
+        const sidebar = document.getElementById('sidebar');
+        const messageContainer = document.querySelector('.message-container');
+        const toggleButton = document.querySelector('.sidebar-toggle');
+
+        // Fungsi untuk menyesuaikan ukuran dan posisi chatbot serta message-container
+        function adjustLayout() {
+            const windowWidth = window.innerWidth;
+
+            if (windowWidth < 395) {
+                // Jika lebar jendela kurang dari 395px
+                if (sidebar.classList.contains('open')) {
+                    // Sidebar terbuka
+                    sidebar.style.width = '389px';
+                    chatbot.style.left = '400px';
+                    messageContainer.style.width = 'calc(100% - 400px)';
+                    messageContainer.style.left = '400px';
+                } else {
+                    sidebar.style.width = '0';
+                    chatbot.style.left = '0';
+                    messageContainer.style.width = 'calc(100% - 40px)';
+                    messageContainer.style.left = '0';
+                }
+            } else if (windowWidth < 460) {
+                if (sidebar.classList.contains('open')) {
+                    sidebar.style.width = '480px';
+                    chatbot.style.left = '480px';
+                    messageContainer.style.width = 'calc(100% - 480px)';
+                    messageContainer.style.left = '480px';
+                } else {
+                    sidebar.style.width = '0';
+                    chatbot.style.left = '0';
+                    messageContainer.style.width = 'calc(100% - 40px)';
+                    messageContainer.style.left = '0';
+                }
+            } else if (windowWidth < 680) {
+                if (sidebar.classList.contains('open')) {
+                    sidebar.style.width = '678px';
+                    chatbot.style.left = '678px';
+                    messageContainer.style.width = 'calc(100% - 678px)';
+                    messageContainer.style.left = '678px';
+                } else {
+                    sidebar.style.width = '0';
+                    chatbot.style.left = '0';
+                    messageContainer.style.width = 'calc(100% - 40px)';
+                    messageContainer.style.left = '0';
+                }
+            } else {
+                if (sidebar.classList.contains('open')) {
+                    sidebar.style.width = '300px';
+                    chatbot.style.left = '300px';
+                    messageContainer.style.width = 'calc(100% - 340px)';
+                    messageContainer.style.left = '300px';
+                } else {
+                    sidebar.style.width = '0';
+                    chatbot.style.left = '0';
+                    messageContainer.style.width = 'calc(100% - 40px)';
+                    messageContainer.style.left = '0';
+                }
+            }
+        }
+
+        // Menambahkan event listener untuk toggle sidebar
+        toggleButton.addEventListener('click', () => {
+            // Toggle status sidebar (open/close)
+            sidebar.classList.toggle('open');
+            
+            // Update posisi dan ukuran chatbot serta message-container setelah toggle
+            adjustLayout();
+        });
+
+        // Panggil fungsi adjustLayout saat halaman pertama kali dimuat
+        window.addEventListener('load', () => {
+            // Jika ukuran layar lebih besar dari 680px, sidebar otomatis terbuka
+            if (window.innerWidth >= 680) {
+                sidebar.classList.add('open');
+            }
+            adjustLayout();
+        });
+
+        // Menambahkan event listener untuk perubahan ukuran jendela
+        window.addEventListener('resize', adjustLayout);
+
+
+    </script>
+</body>
+</html>

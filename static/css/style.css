@@ -1,0 +1,452 @@
+:root {
+  --default-font: "Quicksand", "Open Sans", "Lora", system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --heading-font: "Quicksand", sans-serif;
+  --nav-font: "Quicksand", sans-serif;
+}
+
+body {
+  margin: 0;
+  font-family: var(--default-font);
+  background-color: #f9f9f9;
+}
+
+.chatbot-container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Menyesuaikan ukuran header */
+#header {
+  background-color: #74c2af;
+  color: rgb(255, 249, 249);
+  display: flex;
+  justify-content: center;
+  font-size: 16px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 0 0 10px 10px; /* Radius pada bawah header */
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+#header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: black; /* Garis bawah putih */
+  opacity: 0.7; /* Memberikan efek transparansi */
+}
+
+
+#header .logo {
+  max-width: 200px; /* Sesuaikan ukuran maksimum logo */
+  height: auto;
+  display: inline-block;
+  margin-top: -30px;
+  margin-bottom: -18px;
+}
+
+.suggestion-btn {
+  color: rgb(0, 0, 0);
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin: 5px 0;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+#chatbot {
+  background: url('../img/bg_chat.png') no-repeat center center; /* Menampilkan gambar latar belakang */
+  background-size: cover; /* Membuat gambar latar belakang menutupi seluruh area */
+  padding: 0;
+  margin: 0;
+  position: fixed; /* Tetap di tempat saat scrolling */
+  top: 80px;
+  left: 0;  /* Ini akan diubah oleh JavaScript */
+  right: 0;
+  bottom: 80px;
+  overflow-y: scroll; /* Menambahkan scroll vertikal */
+  scrollbar-width: 10px; /* Menetapkan ketebalan scrollbar untuk Firefox */
+  scrollbar-color: #74c2af; /* Menghilangkan warna track dan thumb di Firefox */
+  transition: left 0.3s ease; /* Menambahkan transisi pada properti left */
+}
+
+/* Desain custom scrollbar untuk Webkit browser (Chrome, Safari) */
+#chatbot::-webkit-scrollbar {
+  width: 10px; /* Lebar scrollbar */
+  background: transparent; /* Menghilangkan background track */
+}
+
+#chatbot::-webkit-scrollbar-track {
+  background: transparent; /* Menghilangkan track */
+  border: none; /* Hilangkan pembatas track */
+}
+
+#chatbot::-webkit-scrollbar-thumb {
+  background-color: #74c2af;
+  border-radius: 3px;
+  border: 2px solid transparent;
+}
+
+#chatbot::-webkit-scrollbar-thumb:hover {
+  background-color: #58a89d; /* Warna thumb saat hover */
+}
+
+.message-container {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Memusatkan isi secara horizontal */
+  gap: 10px;
+  background-color: #74c2af;
+  padding: 10px;
+  border-radius: 10px;
+  position: fixed;
+  bottom: 10px; /* Menempatkan di bawah */
+  margin: 0 20px 5px 20px; /* Memberikan margin kiri dan kanan */
+  width: calc(100% - 40px); /* Mengatur lebar menjadi 100% dikurangi margin kiri dan kanan */
+  box-sizing: border-box;
+  left: 0;
+  right: 0;
+  transition: width 0.3s ease, left 0.3s ease; /* Menambahkan transisi untuk lebar dan posisi */
+}
+
+/* Styling untuk input field */
+input#input-field {
+  padding: 15px;
+  border: none;
+  border-radius: 10px;
+  outline: none;
+  width: 100%;
+  font-family: Arial, sans-serif; /* Tentukan font jika belum ada */
+  font-weight: 500; /* Menetapkan font-weight untuk input */
+}
+
+/* Styling untuk placeholder */
+input#input-field::placeholder {
+  font-family: var(--default-font);
+  font-weight: 600;
+}
+
+
+/* Styling untuk tombol clear (sampah) */
+.clear-btn {
+  background-color: #fdd5b4;
+  display: flex;
+  border: none;
+  color: rgb(250, 18, 18);
+  padding: 10px 5px;
+  margin-left: -5px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.clear-btn:hover {
+  background-color: #d85d5d;
+  color: #f2f2f2;
+}
+
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+button img {
+  height: 15px;
+  width: auto;
+}
+
+.mic-btn {
+  display: flex;
+  align-items: center;
+  background-color: #ffddc1;
+  padding: 10px 12px;
+  border-radius: 50%;
+  font-size: 16px;
+  margin-left: -10px;
+}
+
+.send-icon {
+  display: flex;
+  align-items: center;
+  background-color: #ffddc1;
+  padding: 10px;
+  border-radius: 50%;
+  font-size: 16px;
+  margin-left: -10px; /* Menurunkan jarak antara ikon kirim dan mikrofon */
+}
+
+.recording-notification {
+  position: fixed;
+  bottom: 50%;
+  left: 50%;
+  transform: translate(-50%, 50%);
+  background-color: rgba(118, 246, 222, 0.8);
+  color: rgb(0, 0, 0);
+  padding: 10px 20px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 1000;
+}
+
+.recording-notification::before {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background-color: rgb(255, 0, 0);
+  border-radius: 50%;
+  animation: recording-blink 1s infinite;
+}
+
+@keyframes recording-blink {
+  0%, 100% {
+      opacity: 1;
+  }
+  50% {
+      opacity: 0;
+  }
+}
+
+/* Styling untuk pesan chatbot */
+.chatbot-message {
+  background-color: #ffddc1;
+  position: relative;
+  padding: 10px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  margin-left: 20px;
+  border-radius: 10px;
+  min-width: 5%; /* Minimum lebar pesan agar pesan tidak terlalu kecil */
+  max-width: 80%; /* Lebar maksimum penuh agar fleksibel mengikuti konten */
+  width: fit-content; /* Lebih baik menyesuaikan lebar berdasarkan panjang konten */
+  word-wrap: break-word; /* Membungkus teks agar teks panjang tidak keluar batas */
+  white-space: normal; /* Membungkus teks agar panjangnya menyesuaikan */
+}
+
+/* Styling untuk respon bot (sebelah kiri) */
+.chatbot-message.bot {
+  background-color: #f1f1f1;
+  margin-left: 10px;
+  text-align: left;
+  margin-right: auto;
+}
+
+/* Styling untuk respon pengguna (sebelah kanan) */
+.chatbot-message.user-message {
+  background-color: #74c2af;
+  color: white;
+  margin-right: 20px;
+  text-align: left;
+  margin-left: auto;
+}
+
+/* Styling untuk waktu */
+.time {
+  position: absolute;
+  bottom: 5px;
+  right: 10px;
+  font-size: 12px;
+  color: #888;
+}
+
+/* Styling untuk tombol salin dan speaker */
+.button-group {
+  display: flex;
+  gap: 5px;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+
+button.copy-btn, button.speak-btn {
+  background-color: #ffddc1;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button.copy-btn:hover, button.speak-btn:hover {
+  background-color: #fdd5b4;
+}
+
+button.copy-btn::before {
+  content: '\1F4CB'; /* Clipboard icon */
+  margin-right: 2px;
+}
+
+button.speak-btn::before {
+  content: '\1F50A'; /* Speaker icon */
+  margin-right: 2px;
+}
+
+button.copy-btn {
+  position: relative;
+}
+
+button.copy-btn::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  display: none;
+  white-space: nowrap;
+}
+
+button.copy-btn:hover::after {
+  display: block;
+}
+
+/* Styling untuk sidebar */
+.sidebar {
+  width: 300px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: -300px;
+  background-color: #74c2af;
+  color: #fff;
+  transition: 0.3s;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+  border-radius: 10px 10px 0px 0px;
+  box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar::after,
+.sidebar::before {
+  content: '';
+  position: absolute;
+  width: 3px;
+  background: black;
+  opacity: 0.7;
+}
+
+.sidebar::after {
+  bottom: 0;
+  left: 0;
+  height: 3px;
+}
+
+.sidebar::before {
+  top: 0;
+  right: 0;
+  height: 100%;
+}
+
+
+.sidebar.open {
+  left: 0; /* Sidebar muncul saat toggle aktif atau pada halaman pertama */
+}
+
+.sidebar .menu-item {
+  color: rgb(0, 0, 0);
+  border: none;
+  padding: 20px 20px;
+  border-radius: 5px;
+  width: 100%;
+  transition: background-color 0.3s, transform 0.2s;
+  margin: 10px 0;
+}
+
+.sidebar .menu-item h1 {
+  font-weight: 900;
+  font-size: 30px;
+  text-align: left;
+  padding: 0px 17px;
+}
+
+.sidebar .menu-item a {
+  text-decoration: none;
+  color: #fff;
+  font-size: 18px;
+  display: block;
+  padding: 10px;
+  transition: background-color 0.2s;
+}
+
+.sidebar .menu-item a:hover {
+  background-color: #34495e;
+  border-radius: 5px;
+}
+
+.sidebar-toggle {
+  position: absolute;
+  top: 25px;
+  left: 20px;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 1100;
+  color: #2c3e50;
+}
+
+.content {
+  margin-left: 0;
+  transition: margin-left 0.3s;
+}
+
+.content.shifted {
+  margin-left: 300px; /* Bergeser jika sidebar terbuka */
+}
+
+@media (max-width: 1200px) {
+  .chatbot-message {
+    min-width: 7%;
+  }
+}
+
+@media (max-width: 980px) {
+  .chatbot-message {
+    min-width: 9%;
+  }
+}
+
+@media (max-width: 820px) {
+  .chatbot-message {
+    min-width: 11%;
+  }
+}
+
+@media (max-width: 680px) {
+  .chatbot-message {
+    min-width: 10%;
+  }
+}
+
+@media (max-width: 460px) {
+  .chatbot-message {
+    min-width: 13%;
+  }
+}

@@ -1,0 +1,4 @@
+python -m venv .lib
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.lib\Scripts\activate
+pip install -r requirements.txt (buat install library)
